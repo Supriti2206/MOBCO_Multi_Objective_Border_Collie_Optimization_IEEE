@@ -1,5 +1,3 @@
-# BCO_IEEE_Multi_Objective_Optimization
-
 LINK FOR COMPARISON ALGORITHMS FOR MOBCO:
 https://github.com/Samiksha-bajoria/Multi_objective_border_collie_optimization
 
