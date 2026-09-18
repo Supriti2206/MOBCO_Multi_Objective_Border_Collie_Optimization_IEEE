@@ -1,120 +1,201 @@
-LINK FOR COMPARISON ALGORITHMS FOR MOBCO:
-https://github.com/Samiksha-bajoria/Multi_objective_border_collie_optimization
-
 # Multi-Objective Border Collie Optimization (MOBCO)
 
-This repository contains the implementation and experimental framework for **Multi-Objective Border Collie Optimization (MOBCO)**, a multi-objective metaheuristic optimization algorithm inspired by the herding and hunting behavior of Border Collies.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.x-blue.svg)](https://www.python.org/)
+[![Research](https://img.shields.io/badge/IEEE%20CIS-Research%20Internship-orange.svg)](#)
 
-The framework provides a complete pipeline for optimization, benchmark evaluation, performance analysis, visualization, sensitivity analysis, combined-fitness analysis, and statistical comparison with other multi-objective optimization algorithms.
+> Research Internship work carried out under **IEEE CIS** on the design and implementation of **Multi-Objective Border Collie Optimization (MOBCO)**.
+
+This repository contains the full implementation and experimental framework for **MOBCO**, a multi-objective metaheuristic optimization algorithm inspired by the herding and hunting behavior of Border Collies. It provides an end-to-end pipeline covering optimization, benchmark evaluation, performance analysis, visualization, sensitivity analysis, combined-fitness analysis, and statistical comparison against other multi-objective optimization algorithms.
+
+A companion repository with comparison algorithms used to benchmark MOBCO is available here: **[Multi-Objective Border Collie Optimization — Comparison Algorithms](https://github.com/Samiksha-bajoria/Multi_objective_border_collie_optimization)**.
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Repository Structure](#repository-structure)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [The MOBCO Algorithm](#the-mobco-algorithm)
+- [Benchmark Problems](#benchmark-problems)
+- [Performance Metrics](#performance-metrics)
+- [Visualization](#visualization)
+- [Sensitivity Analysis](#sensitivity-analysis)
+- [Statistical Analysis](#statistical-analysis)
+- [Related Work](#related-work)
+- [License](#license)
+- [Acknowledgements](#acknowledgements)
 
 ---
 
 ## Overview
 
-Multi-Objective Border Collie Optimization (MOBCO) extends the Border Collie Optimization (BCO) algorithm to solve multi-objective optimization problems.
+**Multi-Objective Border Collie Optimization (MOBCO)** extends the single-objective Border Collie Optimization (BCO) algorithm to solve multi-objective optimization problems.
 
-The algorithm maintains a population of candidate solutions and uses Border Collie-inspired behaviors such as:
+The algorithm maintains a population of candidate solutions and models Border Collie-inspired behaviors such as:
 
-- Herding
-- Stalking
-- Gathering
-- Eyeing
-- Mutation
-- Local search
+- **Herding** – guiding the population toward promising regions of the search space
+- **Stalking** – controlled, cautious movement toward target solutions
+- **Gathering** – convergence of the population around non-dominated solutions
+- **Eyeing** – a stagnation-triggered mechanism to maintain search pressure
+- **Mutation** – stochastic perturbation to preserve diversity
+- **Local search** – fine-grained refinement of candidate solutions
 
-MOBCO uses Pareto dominance and an external archive to maintain a diverse set of non-dominated solutions approximating the Pareto-optimal front.
+MOBCO uses **Pareto dominance** together with an **external archive** to maintain a diverse, well-distributed set of non-dominated solutions approximating the true Pareto-optimal front.
 
 ---
 
 ## Features
 
-The framework provides the following capabilities:
-
-- Multi-objective Border Collie Optimization
+- Multi-objective Border Collie Optimization core algorithm
 - Pareto dominance-based solution selection
 - Non-dominated sorting
-- Crowding-distance based diversity preservation
+- Crowding-distance-based diversity preservation
 - External archive management
-- Herding and stalking mechanisms
-- Gathering behavior
-- Eyeing mechanism
-- Adaptive velocity and acceleration
+- Herding, stalking, and gathering mechanisms
+- Eyeing (stagnation-triggered) mechanism
+- Adaptive velocity and acceleration updates
 - Mutation and step-size decay
-- Local search
-- Hypervolume calculation
-- IGD and GD calculation
-- Spacing and Spread metrics
-- Epsilon metric
+- Local search refinement
+- Hypervolume (HV), IGD, and GD metric calculation
+- Spacing, Spread, and Epsilon indicator calculation
 - Runtime measurement
 - Expected vs. obtained Pareto-front visualization
-- Objective-space visualization
-- Decision-space visualization
-- Convergence analysis
-- Sobol sensitivity analysis
+- Objective-space and decision-space visualization
+- Convergence and distribution analysis
+- Sobol sensitivity analysis (Saltelli sampling)
 - Combined-fitness analysis
-- Statistical analysis using ANOVA
-- Box-plot generation
-- Support for multiple benchmark families
-- Support for EvoPINN optimization problems
+- Statistical analysis via ANOVA with box-plot generation
+- Support for 27 benchmark problems across four problem families, including EvoPINN-based problems
 
 ---
 
-# Benchmark Problems
+## Repository Structure
 
-The framework supports **27 optimization problems** belonging to four major categories.
-
-## EvoPINN Problems
-
-The following 12 EvoPINN problems are supported:
-
-1. EvoPINN1_Poisson1D
-2. EvoPINN2_Heat1D
-3. EvoPINN3_Advection1D
-4. EvoPINN4_Wave1D
-5. EvoPINN5_Burgers1D
-6. EvoPINN6_AllenCahn1D
-7. EvoPINN7_Poisson2D
-8. EvoPINN8_ReactionDiffusion1D
-9. EvoPINN9_DampedOscillator
-10. EvoPINN10_VanDerPol
-11. EvoPINN11_LotkaVolterra
-12. EvoPINN12_Schrodinger1D
-
-## ZDT Problems
-
-Five standard ZDT benchmark problems are included:
-
-1. ZDT1
-2. ZDT2
-3. ZDT3
-4. ZDT4
-5. ZDT6
-
-## DTLZ Problems
-
-Seven DTLZ benchmark problems are included:
-
-1. DTLZ1
-2. DTLZ2
-3. DTLZ3
-4. DTLZ4
-5. DTLZ5
-6. DTLZ6
-7. DTLZ7
-
-## Mixed Objective Problems
-
-Three mixed-objective problems are included:
-
-1. Mixed_ZDT1
-2. Mixed_DTLZ1
-3. Mixed_DTLZ2
+```
+MOBCO_IEEE/
+│
+├── MOBCO_git/                              # Core MOBCO algorithm implementation
+│   ├── archive.py                          # External archive management
+│   ├── bounds_check.py                     # Decision-variable bound enforcement
+│   ├── check.py                            # Validation utilities
+│   ├── config.py                           # Algorithm and experiment configuration
+│   ├── crowding_distance.py                # Crowding-distance calculation
+│   ├── dataset.py                          # Dataset / problem loading utilities
+│   ├── dominance.py                        # Pareto dominance checks
+│   ├── evopinn_problem.py                  # EvoPINN benchmark problem definitions
+│   ├── excel_writer.py                     # Results export to Excel
+│   ├── fitness.py                          # Objective function evaluation
+│   ├── generate.py                         # Population / solution generation
+│   ├── herding.py                          # Herding behavior
+│   ├── local_search.py                     # Local search refinement
+│   ├── main.py                             # Main entry point
+│   ├── metrics.py                          # Performance metric calculations
+│   ├── mixed_test_functions.py             # Mixed-objective benchmark problems
+│   ├── nondominated_sort.py                # Non-dominated sorting
+│   ├── normalization.py                    # Objective-space normalization
+│   ├── optimizer.py                        # Core optimization loop
+│   ├── population_init.py                  # Population initialization
+│   ├── position_update.py                  # Position/velocity update rules
+│   ├── rebuild_master_summary.py           # Summary report regeneration
+│   ├── requirements.txt                    # Dependencies for the core algorithm
+│   ├── run_experiment.py                   # Experiment runner
+│   ├── sensitivity_analysis.py             # Sobol sensitivity analysis
+│   ├── standard_test_functions.py          # ZDT / DTLZ benchmark problems
+│   ├── test_mobco.py                       # Test suite
+│   ├── velocity_time_acceleration.py       # Velocity/acceleration/time dynamics
+│   └── visualization.py                    # Plotting and visualization utilities
+│
+├── Combination_graph/                      # Combined-fitness analysis
+│   ├── Combined_fitness.py
+│   ├── Combined_plots_lib.py
+│   └── requirements.txt
+│
+├── Anova_independent_runs_with_box_plots/  # Statistical comparison across runs
+│   ├── requirements.txt
+│   └── src/
+│       ├── compute_combined_fitness.py
+│       ├── export_combined_fitness_by_problem.py
+│       ├── generate_boxplots.py
+│       ├── load_data.py
+│       └── run_anova_combined_fitness.py
+│
+├── LICENSE
+└── README.md
+```
 
 ---
 
-# MOBCO Algorithm
+## Getting Started
 
-The main optimization process consists of the following stages:
+### Prerequisites
+
+- Python 3.x
+- Dependencies listed in each module's `requirements.txt`
+
+### Installation
+
+```bash
+git clone https://github.com/Supriti2206/MOBCO_Multi_Objective_Border_Collie_Optimization_IEEE.git
+cd MOBCO_Multi_Objective_Border_Collie_Optimization_IEEE
+
+# Install dependencies for the core algorithm
+pip install -r MOBCO_git/requirements.txt
+
+# Install dependencies for combined-fitness analysis (optional)
+pip install -r Combination_graph/requirements.txt
+
+# Install dependencies for ANOVA / box-plot analysis (optional)
+pip install -r Anova_independent_runs_with_box_plots/requirements.txt
+```
+
+---
+
+## Usage
+
+### Running the Optimizer
+
+```bash
+cd MOBCO_git
+python main.py
+```
+
+### Running a Full Experiment
+
+```bash
+python run_experiment.py
+```
+
+### Running Sensitivity Analysis
+
+```bash
+python sensitivity_analysis.py
+```
+
+### Running Combined-Fitness Analysis
+
+```bash
+cd Combination_graph
+python Combined_fitness.py
+```
+
+### Running Statistical (ANOVA) Analysis
+
+```bash
+cd Anova_independent_runs_with_box_plots/src
+python run_anova_combined_fitness.py
+```
+
+> Configuration options such as population size, number of iterations, archive size, and problem selection can be adjusted in `MOBCO_git/config.py`.
+
+---
+
+## The MOBCO Algorithm
+
+The main optimization process follows these stages:
 
 1. Initialize the population.
 2. Evaluate objective functions.
@@ -133,166 +214,82 @@ The main optimization process consists of the following stages:
 
 ---
 
-# Project Structure
+## Benchmark Problems
 
-```text
-MOBCO_IEEE/
-│
-├── MOBCO/
-│   ├── archive.py
-│   ├── bounds_check.py
-│   ├── check.py
-│   ├── config.py
-│   ├── crowding_distance.py
-│   ├── dataset.py
-│   ├── dominance.py
-│   ├── evopinn_problem.py
-│   ├── excel_writer.py
-│   ├── fitness.py
-│   ├── generate.py
-│   ├── herding.py
-│   ├── local_search.py
-│   ├── main.py
-│   ├── metrics.py
-│   ├── mixed_test_functions.py
-│   ├── nondominated_sort.py
-│   ├── normalization.py
-│   ├── optimizer.py
-│   ├── population_init.py
-│   ├── position_update.py
-│   ├── rebuild_master_summary.py
-│   ├── requirements.txt
-│   ├── run_experiment.py
-│   ├── sensitivity_analysis.py
-│   ├── standard_test_functions.py
-│   ├── test_mobco.py
-│   ├── velocity_time_acceleration.py
-│   └── visualization.py
-│
-├── Combination_graph/
-│   ├── Combined_fitness.py
-│   ├── Combined_plots_lib.py
-│   └── requirements.txt
-│
-├── Anova_independent_runs_with_box_plots/
-│   ├── requirements.txt
-│   └── src/
-│       ├── compute_combined_fitness.py
-│       ├── export_combined_fitness_by_problem.py
-│       ├── generate_boxplots.py
-│       ├── load_data.py
-│       └── run_anova_combined_fitness.py
-│
-├── LICENSE
-└── README.md
+The framework supports **27 optimization problems** across four major categories.
 
-# Performance Metrics
+### EvoPINN Problems (12)
 
-MOBCO is evaluated using multiple performance metrics to assess convergence, diversity, distribution, and computational efficiency.
+| # | Problem |
+|---|---------|
+| 1 | EvoPINN1_Poisson1D |
+| 2 | EvoPINN2_Heat1D |
+| 3 | EvoPINN3_Advection1D |
+| 4 | EvoPINN4_Wave1D |
+| 5 | EvoPINN5_Burgers1D |
+| 6 | EvoPINN6_AllenCahn1D |
+| 7 | EvoPINN7_Poisson2D |
+| 8 | EvoPINN8_ReactionDiffusion1D |
+| 9 | EvoPINN9_DampedOscillator |
+| 10 | EvoPINN10_VanDerPol |
+| 11 | EvoPINN11_LotkaVolterra |
+| 12 | EvoPINN12_Schrodinger1D |
 
-## Hypervolume (HV)
+### ZDT Problems (5)
 
-Hypervolume measures the volume of the objective space dominated by the obtained Pareto front with respect to a reference point.
+ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
 
-A higher Hypervolume value generally indicates better convergence and diversity.
+### DTLZ Problems (7)
 
-## Inverted Generational Distance (IGD)
+DTLZ1, DTLZ2, DTLZ3, DTLZ4, DTLZ5, DTLZ6, DTLZ7
 
-IGD measures the average distance between the obtained solution set and the reference Pareto-optimal front.
+### Mixed-Objective Problems (3)
 
-A lower IGD value indicates better convergence and coverage of the reference front.
-
-## Generational Distance (GD)
-
-GD measures the distance between the obtained Pareto front and the reference Pareto front.
-
-A lower GD value indicates better convergence.
-
-## Spacing
-
-Spacing measures the uniformity of the distribution of solutions along the Pareto front.
-
-A lower Spacing value generally indicates a more uniformly distributed solution set.
-
-## Spread
-
-Spread measures the extent and distribution of solutions across the Pareto front.
-
-It provides information about how well the obtained solutions cover the objective space.
-
-## Epsilon Indicator
-
-The Epsilon indicator measures the minimum factor by which the obtained Pareto front must be translated to dominate the reference front.
-
-A lower Epsilon value generally indicates better performance.
-
-## Runtime
-
-Runtime measures the computational time required by the algorithm to complete the optimization process.
+Mixed_ZDT1, Mixed_DTLZ1, Mixed_DTLZ2
 
 ---
 
-# Visualization
+## Performance Metrics
 
-The framework provides several visualization methods for analyzing the performance and behavior of MOBCO.
+MOBCO is evaluated using multiple complementary metrics that assess convergence, diversity, distribution, and computational efficiency.
 
-## Expected vs Obtained Pareto Front
-
-The expected Pareto front is compared with the obtained non-dominated solutions to evaluate how closely MOBCO approaches the optimal solution set.
-
-## Objective Space
-
-Objective-space plots show the distribution of obtained solutions across the objective dimensions.
-
-For two-objective problems, the solutions are represented using a 2D plot.
-
-For three-objective problems, a 3D representation is used.
-
-For higher-dimensional problems, suitable projections or parallel-coordinate representations are used.
-
-## Decision Space
-
-Decision-space visualization shows the distribution of candidate solutions in the original decision-variable space.
-
-This helps analyze the diversity of solutions before they are mapped to the objective space.
-
-## Convergence Plot
-
-Convergence plots show the change in optimization performance over successive iterations.
-
-The framework can visualize metrics such as:
-
-- Hypervolume
-- IGD
-- GD
-
-These plots help determine whether the algorithm is converging toward a stable solution set.
-
-## Distribution Plot
-
-Distribution plots are used to analyze the spread and uniformity of the obtained Pareto solutions.
+| Metric | Description | Better when |
+|---|---|---|
+| **Hypervolume (HV)** | Volume of the objective space dominated by the obtained Pareto front relative to a reference point | Higher |
+| **Inverted Generational Distance (IGD)** | Average distance between the obtained solution set and the reference Pareto-optimal front | Lower |
+| **Generational Distance (GD)** | Distance between the obtained Pareto front and the reference Pareto front | Lower |
+| **Spacing** | Uniformity of solution distribution along the Pareto front | Lower |
+| **Spread** | Extent and distribution of solutions across the objective space | Depends on context |
+| **Epsilon Indicator** | Minimum factor by which the obtained front must be translated to dominate the reference front | Lower |
+| **Runtime** | Computational time required to complete optimization | Lower |
 
 ---
 
-# Sensitivity Analysis
+## Visualization
 
-A global sensitivity analysis is included to study the influence of MOBCO control parameters on optimization performance.
+The framework includes several visualization tools for analyzing MOBCO's performance and behavior:
 
-The analysis follows a variance-based Sobol sensitivity approach using Hypervolume (HV) as the primary response metric.
+- **Expected vs. Obtained Pareto Front** — compares the theoretical Pareto front against MOBCO's obtained non-dominated solutions.
+- **Objective-Space Plots** — 2D plots for two-objective problems, 3D plots for three-objective problems, and projections or parallel-coordinate plots for higher-dimensional problems.
+- **Decision-Space Plots** — visualize candidate solutions in the original decision-variable space prior to objective mapping.
+- **Convergence Plots** — track metrics such as Hypervolume, IGD, and GD across iterations to assess convergence stability.
+- **Distribution Plots** — analyze the spread and uniformity of the final obtained Pareto solutions.
 
-## Structural Parameters
+---
 
-The structural parameter group includes:
+## Sensitivity Analysis
+
+A global, variance-based **Sobol sensitivity analysis** is included to study the influence of MOBCO's control parameters on optimization performance, using **Hypervolume (HV)** as the primary response metric. Parameter combinations are generated via **Saltelli sampling**.
+
+### Structural Parameters
 
 - Population Size
 - Archive Size
 - Mutation Rate
 - Number of Dogs
-- Eyeing-trigger Stagnation Length
+- Eyeing-Trigger Stagnation Length
 
-## Dynamics-Shaping Parameters
-
-The dynamics-shaping parameter group includes:
+### Dynamics-Shaping Parameters
 
 - Acceleration Damping
 - Mutation Decay Floor
@@ -300,13 +297,7 @@ The dynamics-shaping parameter group includes:
 - Stalking Pull
 - Gathering Pull
 
-## Methodology
-
-The sensitivity analysis uses Saltelli sampling to generate parameter combinations.
-
-The resulting parameter configurations are evaluated using MOBCO, and the resulting Hypervolume values are used to calculate Sobol sensitivity indices.
-
-The analysis helps identify:
+### What the Analysis Reveals
 
 - Parameters with the strongest influence on performance
 - Parameters with relatively small effects
@@ -314,6 +305,34 @@ The analysis helps identify:
 - Total-order parameter effects
 - Parameter interaction effects
 
-## Running Sensitivity Analysis
+Run it with:
+
 ```bash
 python sensitivity_analysis.py
+```
+
+---
+
+## Statistical Analysis
+
+The `Anova_independent_runs_with_box_plots/` module performs statistical comparison of MOBCO's combined-fitness results across independent runs using **ANOVA**, with automated **box-plot generation** for visual interpretation of result variance across benchmark problems.
+
+---
+
+## Related Work
+
+Comparison algorithms used to benchmark MOBCO against other multi-objective optimizers are maintained in a separate repository:
+
+🔗 **[Multi-Objective Border Collie Optimization — Comparison Algorithms](https://github.com/Samiksha-bajoria/Multi_objective_border_collie_optimization)**
+
+---
+
+## License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+---
+
+## Acknowledgements
+
+This work was carried out as part of a **Research Internship under IEEE CIS (Computational Intelligence Society)**, focused on the design, implementation, and empirical evaluation of Multi-Objective Border Collie Optimization.
